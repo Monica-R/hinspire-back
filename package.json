@@ -1,0 +1,28 @@
+{
+  "name": "hinspire-back",
+  "version": "1.0.0",
+  "description": "Backend of hinspire app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Monica-R/hinspire-back.git"
+  },
+  "keywords": [],
+  "author": "Monica-R",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Monica-R/hinspire-back/issues"
+  },
+  "homepage": "https://github.com/Monica-R/hinspire-back#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.2",
+    "jwt": "^0.2.0",
+    "mongoose": "^8.11.0",
+    "morgan": "^1.10.0"
+  }
+}
