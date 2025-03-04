@@ -1,0 +1,1 @@
+// Aquí establecemos la conexión con la BBDD, en esta ocasión, utilizaremos Mongo DB con mongoose
