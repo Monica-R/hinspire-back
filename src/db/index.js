@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 // Conexión a la BBDD
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/hinspire-db";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://moniroka41:4QXNKhor1nJgubs2@cluster0.l8qlh.mongodb.net/hinspire-db";
 
 export const connectDB = async () => {
   try {

@@ -14,13 +14,13 @@ config.applyMiddlewares(app);
 
 // 👇 Start handling routes here
 
-app.use("/", () => {
-    console.info('ESTAMOS EN SERVER!!');
-});
-
 app.use("/auth", authRoutes);
 app.use("/user", profileRoute);
 app.use("/admin", adminRoutes);
+
+app.use("/", () => {
+    console.info('ESTAMOS EN SERVER!!');
+});
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 handlingErrors(app);

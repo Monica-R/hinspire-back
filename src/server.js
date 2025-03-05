@@ -1,5 +1,7 @@
 // Este archivo sirve para arrancar el servidor y ejecutar lo que hay en app.js
 
+import dotenv from 'dotenv';
+dotenv.config();
 // Importamos app.js
 import app from './app.js';
 import { connectDB } from './db/index.js';

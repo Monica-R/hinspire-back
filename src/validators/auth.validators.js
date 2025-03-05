@@ -3,7 +3,7 @@ import User from '../models/User.model.js';
 // Validamos a que los campos del formulario no estén vacíos
 export const validateNotEmpty = (fields) =>  (req, res, next) => {
     for (let field of fields) {
-        if (!req.body[field]?.trim() === "") {
+        if (!req.body[field] || req.body[field].trim() === "") {
             return res.status(400).json({ message: "The field " + field + " is required" });
         }
     }
