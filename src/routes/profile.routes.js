@@ -1,7 +1,7 @@
 import express from 'express';
-import { isAuthenticated } from '../middlewares/jwt.middleware';
-import User from '../models/User.model';
-import { validateEmail } from '../validators/auth.validators';
+import { isAuthenticated } from '../middlewares/jwt.middleware.js';
+import User from '../models/User.model.js';
+import { validateEmail } from '../validators/auth.validators.js';
 
 // Instanciamos el router de express
 const router = express.Router();
@@ -74,3 +74,5 @@ router.delete("/profile", isAuthenticated, async (req, res) => {
       next(error);
     }
 });
+
+export default router;

@@ -3,7 +3,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 // Importamos el modelo User
-import User from '../models/User.js';
+import User from '../models/User.model.js';
 // Importamos los validadores -middlewares- que creamos
 import { validateNotEmpty, validateEmail, validatePasswordStrength, checkUserExists } from '../validators/auth.validators.js';
 // Importamos el middleware de autenticación
@@ -17,21 +17,21 @@ const saltRounds = 10;
 
 // POST /auth/signup - Create a new user
 router.post("/signup",
-    validateNotEmpty(["email", "password", "name"]),
+    validateNotEmpty(["email", "password", "username"]),
     validateEmail,
     validatePasswordStrength,
     checkUserExists,
     async (req, res, next) => {
         try {
             // Usamos <destructuring> en el cuerpo del request para extraer el email, contraseña y el nombre del usuario
-            const { email, password, name } = req.body;
+            const { email, password, username } = req.body;
             // Encriptamos la contraseña con bcrypt
             const hashedPassword = await bcrypt.hash(password, saltRounds);
             // Creamos un nuevo usuario
             const newUser = { //newUser será la requestBody
                 email, 
                 password: hashedPassword, 
-                name 
+                username 
             };
             // Guardamos el usuario en la base de datos
             await User.create(newUser);
@@ -41,7 +41,7 @@ router.post("/signup",
                 user: {
                     _id: newUser._id,
                     email: newUser.email,
-                    name: newUser.name
+                    username: newUser.username
                 }
             })
         } catch (error) {
@@ -69,10 +69,10 @@ router.post("/login",
             const isPasswordCorrect = await bcrypt.compare(password, user.password);
             // Si la contraseña es correcta, creamos un token JWT
             if (isPasswordCorrect) {
-                const { _id, email, name } = user;
+                const { _id, email, username } = user;
 
                 // Construimos un payload con la información del usuario
-                const payload = { _id, email, name };
+                const payload = { _id, email, username };
                 
                 // Creamos un token JWT con el payload y el secret
                 const token = jwt.sign(payload, process.env.TOKEN_SECRET, {
@@ -102,3 +102,5 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
 router.get("/logout", (req, res) => {
     res.status(200).json({ message: "Logout successful" });
 });
+
+export default router;

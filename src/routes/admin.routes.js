@@ -1,11 +1,29 @@
 import express from 'express';
-import User from '../models/User.model';
-import { isAuthenticated } from '../middlewares/jwt.middleware';
-import { isAdmin } from '../middlewares/isAdmin.middleware';
-import { validateEmail } from '../validators/auth.validators';
+import User from '../models/User.model.js';
+import { isAuthenticated } from '../middlewares/jwt.middleware.js';
+import { isAdmin } from '../middlewares/isAdmin.middleware.js';
+import { validateEmail } from '../validators/auth.validators.js';
 
 // Instanciamos el router de express
 const router = express.Router();
+
+// GET /admin/users/:id - Obtenemos el usuario por el id
+router.get("users/:_id", async (req, res) => {
+    try {
+        const userId = req.body._id;
+        const user = await User.findOne({ userId });
+        console.log(user);
+        // Si no encontramos al usuario, mandamos un 404
+        if (!user) {
+            res.status(404).send("User is not found");
+            return;
+        }
+
+        res.status(200).json({ user });
+    } catch (error) {
+        next(error);
+    }
+});
 
 // GET /admin/users - Obtenemos todos los usuarios
 router.get("/users", async (req, res) => {
@@ -18,9 +36,9 @@ router.get("/users", async (req, res) => {
 });
 
 // PUT /admin/users/:id - Actualizamos un usuario
-router.put("/users/:id", isAuthenticated, isAdmin, validateEmail, async (req, res) => {
+router.put("/users/:_id", isAuthenticated, isAdmin, validateEmail, async (req, res) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params._id;
         const { name, email } = req.body;
 
         if (!name && !email) {
@@ -54,3 +72,5 @@ router.put("/users/:id", isAuthenticated, isAdmin, validateEmail, async (req, re
         next(error);
     }
 });
+
+export default router;
