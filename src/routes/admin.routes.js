@@ -8,10 +8,10 @@ import { validateEmail } from '../validators/auth.validators.js';
 const router = express.Router();
 
 // GET /admin/users/:id - Obtenemos el usuario por el id
-router.get("users/:_id", async (req, res) => {
+router.get("/users/:_id", async (req, res) => {
     try {
-        const userId = req.body._id;
-        const user = await User.findOne({ userId });
+        const userId = req.params._id;
+        const user = await User.findById(userId);
         console.log(user);
         // Si no encontramos al usuario, mandamos un 404
         if (!user) {
