@@ -35,14 +35,22 @@ router.post("/signup",
             };
             // Guardamos el usuario en la base de datos
             await User.create(newUser);
-            // Respondemos con un mensaje de éxito y los datos del usuario creado
-            return res.status(201).json({
-                message: "User created successfully",
-                user: {
+
+            // Generamos el token JWT
+            const authToken = jwt.sign(
+                { 
                     _id: newUser._id,
                     email: newUser.email,
                     username: newUser.username
-                }
+                }, // payload
+                process.env.TOKEN_SECRET,
+                { algorithm: "HS256", expiresIn: "4h" } // Opciones
+            )
+
+            // Respondemos con un mensaje de éxito y los datos del usuario creado
+            return res.status(201).json({
+                message: "User created successfully",
+                authToken
             })
         } catch (error) {
             next(error);
