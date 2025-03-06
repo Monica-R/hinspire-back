@@ -7,6 +7,8 @@ import { handlingErrors } from './errors/index.js';
 import authRoutes from './routes/auth.routes.js';
 import profileRoute from './routes/profile.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import storyRoutes from './routes/story.routes.js';
+import fragmentRoutes from './routes/fragment.routes.js';
 
 const app = express();
 config.applyMiddlewares(app);
@@ -17,6 +19,8 @@ config.applyMiddlewares(app);
 app.use("/auth", authRoutes);
 app.use("/user", profileRoute);
 app.use("/admin", adminRoutes);
+app.use("/stories", storyRoutes);
+app.use("/fragments", fragmentRoutes);
 
 app.use("/", (req, res, next) => {
     console.info('ESTAMOS EN SERVER!!');
