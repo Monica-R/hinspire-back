@@ -8,7 +8,7 @@ import { validateEmail } from '../validators/auth.validators.js';
 const router = express.Router();
 
 // GET /admin/users/:id - Obtenemos el usuario por el id
-router.get("/users/:_id", async (req, res) => {
+router.get("/users/:_id", isAuthenticated, isAdmin, validateEmail, async (req, res) => {
     try {
         const userId = req.params._id;
         const user = await User.findById(userId);
@@ -26,7 +26,7 @@ router.get("/users/:_id", async (req, res) => {
 });
 
 // GET /admin/users - Obtenemos todos los usuarios
-router.get("/users", async (req, res) => {
+router.get("/users", isAuthenticated, isAdmin, validateEmail, async (req, res) => {
     try {
         const users = await User.find().select("-password");
         res.status(200).json({ users });

@@ -69,10 +69,10 @@ router.post("/login",
             const isPasswordCorrect = await bcrypt.compare(password, user.password);
             // Si la contraseña es correcta, creamos un token JWT
             if (isPasswordCorrect) {
-                const { _id, email, username } = user;
+                const { _id, email, username, isAdmin } = user;
 
                 // Construimos un payload con la información del usuario
-                const payload = { _id, email, username };
+                const payload = { _id, email, username, isAdmin };
                 
                 // Creamos un token JWT con el payload y el secret
                 const token = jwt.sign(payload, process.env.TOKEN_SECRET, {
