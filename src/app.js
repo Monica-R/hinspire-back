@@ -20,6 +20,7 @@ app.use("/admin", adminRoutes);
 
 app.use("/", () => {
     console.info('ESTAMOS EN SERVER!!');
+    res.status(200).send("HOLA DESDE SERVER");
 });
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
