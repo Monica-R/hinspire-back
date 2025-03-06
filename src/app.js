@@ -18,7 +18,7 @@ app.use("/auth", authRoutes);
 app.use("/user", profileRoute);
 app.use("/admin", adminRoutes);
 
-app.use("/", () => {
+app.use("/", (req, res, next) => {
     console.info('ESTAMOS EN SERVER!!');
     res.status(200).send("HOLA DESDE SERVER");
 });
