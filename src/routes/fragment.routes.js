@@ -3,7 +3,8 @@ import { addFragment, getFragments, editFragment, deleteFragment } from '../cont
 
 const router = express();
 
-router.get("/", getFragments);
+//router.get("/", getFragments);
+router.get("/story/:id", getFragments);
 router.post("/", addFragment);
 router.put("/:id", editFragment);
 router.delete("/:id", deleteFragment);
