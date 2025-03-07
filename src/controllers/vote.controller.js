@@ -32,8 +32,8 @@ export const deleteVote = async (req, res, next) => {
         const fragmentId = req.params.fragmentId;
 
         // Comprobamos si el voto existe
-        const voto = Vote.findOne({ user: userId, fragment: fragmentId });
-        if (!voto) {
+        const vote = await Vote.findOne({ user: userId, fragment: fragmentId });
+        if (!vote) {
             res.status(400).send("You are not voted for this fragment.");
             return;
         }
