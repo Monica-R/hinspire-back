@@ -9,6 +9,7 @@ import profileRoute from './routes/profile.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import storyRoutes from './routes/story.routes.js';
 import fragmentRoutes from './routes/fragment.routes.js';
+import voteRoutes from './routes/votes.routes.js';
 
 const app = express();
 config.applyMiddlewares(app);
@@ -21,6 +22,7 @@ app.use("/user", profileRoute);
 app.use("/admin", adminRoutes);
 app.use("/stories", storyRoutes);
 app.use("/fragments", fragmentRoutes);
+app.use("/votes", voteRoutes);
 
 app.use("/", (req, res, next) => {
     console.info('ESTAMOS EN SERVER!!');
