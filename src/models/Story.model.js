@@ -6,7 +6,8 @@ const storySchema = new mongoose.Schema({
     required: true 
   },
   description: { 
-    type: String 
+    type: String,
+    required: true
   },
   author: { 
     type: mongoose.Schema.Types.ObjectId, 
