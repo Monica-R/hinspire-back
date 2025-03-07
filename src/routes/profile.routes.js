@@ -1,6 +1,5 @@
 import express from 'express';
 import { isAuthenticated } from '../middlewares/jwt.middleware.js';
-import User from '../models/User.model.js';
 import { validateEmail } from '../validators/auth.validators.js';
 import { deleteProfile, editProfile, getProfile } from '../controllers/profile.controller.js';
 
