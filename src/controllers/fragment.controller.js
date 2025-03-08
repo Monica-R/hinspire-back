@@ -1,4 +1,5 @@
 import Fragment from "../models/Fragment.model.js";
+import Story from "../models/Story.model.js";
 
 // GET: All fragments by story
 export const getFragmentsByStory = async (req, res, next) => {
@@ -16,13 +17,29 @@ export const addFragment = async (req, res, next) => {
   try {
     const storyId = req.params.id;
     const author = req.payload._id;
+    
+    const story = await Story.findById(storyId);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    // Si hay más de 3 fragmentos pendientes, no se puede agregar más
+    if (story.pendingFragments.length >= 3) {
+      return res.status(400).json({ message: "You can't add more fragments to this story" });
+    }
+
     const { content } = req.body;
     const newFragment = {
       story: storyId,
       content,
       author
     }
-    await Fragment.create(newFragment);
+    const fragmentAdded = await Fragment.create(newFragment);
+
+    // Agregamos el fragmento a la historia
+    story.pendingFragments.push(fragmentAdded._id);
+    await story.save();
+
     res.status(201).json({ message: "Fragment created successfully" });
   } catch (error) {
     console.log(error);
@@ -82,3 +99,40 @@ export const deleteFragment = async (req, res, next) => {
     next(error);
   }
 }
+
+export const acceptFragment = async (req, res, next) => {
+  try {
+    const { storyId, fragmentId } = req.params;
+    const userId = req.payload._id;
+
+    const story = await Story.findById(storyId);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    // Solo el autor de la historia puede aceptar fragmentos
+    if (story.author.toString() !== userId) {
+      return res.status(403).json({ message: "You are not authorized to accept fragments for this story." });
+    }
+
+    // Verificamos que el fragmento está en los pendientes
+    if (!story.pendingFragments.includes(fragmentId)) {
+      return res.status(400).json({ message: "Fragment is not in pending list." });
+    }
+
+    // Agregamos el fragmento aceptado a la historia
+    story.fragments.push(fragmentId);
+
+    // Limpiar los fragmentos pendientes
+    story.pendingFragments = [];
+
+    // Guardamos la historia con el fragmento aceptado
+    await story.save();
+
+    res.status(200).json({ message: "Fragment accepted successfully." });
+
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

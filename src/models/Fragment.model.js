@@ -19,7 +19,7 @@ const fragmentSchema = new mongoose.Schema({
     type: Number, 
     default: 0 
   }
-});
+}, { timestamps: true });
 
 const Fragment = mongoose.model("Fragment", fragmentSchema);
 export default Fragment;

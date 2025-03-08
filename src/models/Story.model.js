@@ -18,8 +18,20 @@ const storySchema = new mongoose.Schema({
     type: String, 
     enum: ["inProgress", "completed"], 
     default: "inProgress" 
-  }, 
-});
+  },
+  pendingFragments: [
+    { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Fragment" 
+    }
+  ],
+  fragments: [
+    { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Fragment" 
+    }
+  ],
+}, { timestamps: true });
 
 const Story = mongoose.model("Story", storySchema);
 export default Story;
