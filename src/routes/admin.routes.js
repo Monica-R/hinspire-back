@@ -1,5 +1,4 @@
 import express from 'express';
-import User from '../models/User.model.js';
 import { isAuthenticated } from '../middlewares/jwt.middleware.js';
 import { isAdmin } from '../middlewares/isAdmin.middleware.js';
 import { validateEmail } from '../validators/auth.validators.js';

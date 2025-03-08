@@ -46,7 +46,7 @@ export const signup = async (req, res, next) => {
     }
 }
 
-export const login = async () => {
+export const login = async (req, res, next) => {
     try {
         // Usamos <destructuring> en el cuerpo del request para extraer el email, contraseña y el nombre del usuario
         const { email, password } = req.body;
