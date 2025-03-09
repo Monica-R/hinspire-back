@@ -23,6 +23,11 @@ export const addFragment = async (req, res, next) => {
       return res.status(404).json({ message: "Story not found" });
     }
 
+    // Bloquear fragmentos si la historia está completada
+    if (story.status === "completed") {
+      return res.status(400).json({ message: "You can't add fragments to a completed story" });
+    }
+
     // Si hay más de 3 fragmentos pendientes, no se puede agregar más
     if (story.pendingFragments.length >= 3) {
       return res.status(400).json({ message: "You can't add more fragments to this story" });
