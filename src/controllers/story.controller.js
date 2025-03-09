@@ -128,3 +128,30 @@ export const getStoriesByUser = async (req, res, next) => {
     next(error);
   }
 }
+
+export const finishStory = async (req, res, next) => {
+  try {
+    const storyId = req.params.id;
+    const userId = req.payload._id;
+    const story = await Story.findById(storyId);
+
+    if (!story) {
+      res.status(404).send("Story not found.");
+    }
+
+    if (story.author.toString() !== userId) {
+      res.status(403).send("You are not authorized to finish this story.");
+    }
+
+    // Cambiar estado de la historia a "completed"
+    story.status = "completed";
+    // vaciamos la lista de "pendingFragments"
+    story.pendingFragments = [];
+    // Guardamos los cambios
+    await story.save();
+    res.status(200).json({ message: "Story completed successfully"});
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+}
