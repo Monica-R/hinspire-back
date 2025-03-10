@@ -15,7 +15,6 @@ export const getUserById = async (req, res, next) => {
     try {
         const userId = req.params._id;
         const user = await User.findById(userId);
-        console.log(user);
         // Si no encontramos al usuario, mandamos un 404
         if (!user) {
             res.status(404).send("User is not found");
