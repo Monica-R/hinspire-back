@@ -5,7 +5,7 @@ import Story from "../models/Story.model.js";
 // GET: all stories
 export const getStories = async (req, res, next) => {
   try {
-    const allStories = await Story.find();
+    const allStories = await Story.find().populate("author", "username");
     res.status(200).json(allStories);
   } catch (error) {
     console.log(error);
