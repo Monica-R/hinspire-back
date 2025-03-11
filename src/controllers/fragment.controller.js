@@ -5,15 +5,7 @@ import Story from "../models/Story.model.js";
 export const getFragmentsByStory = async (req, res, next) => {
   try {
     const storyId = req.params.id;
-    const allFragments = await Fragment.find({ story: storyId })
-    .populate({
-      path: "pendingFragments",
-      populate: { path: "author", select: "username" }
-    })
-    .populate({
-      path: "fragments",
-      populate: { path: "author", select: "username" }
-    });
+    const allFragments = await Fragment.find({ story: storyId });
     res.status(200).json(allFragments);
   } catch (error) {
     console.log(error);
