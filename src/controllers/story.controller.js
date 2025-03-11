@@ -136,6 +136,7 @@ export const deleteStory = async (req, res, next) => {
 export const getStoriesByUser = async (req, res, next) => {
   try {
     const userId = req.payload._id;
+    console.log("User ID:", userId);
     const allUserStories = await Story.find({ author: userId }).populate("author", "username email");
     res.status(200).json(allUserStories);
   } catch (error) {
