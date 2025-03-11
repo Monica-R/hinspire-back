@@ -41,8 +41,8 @@ export const addFragment = async (req, res, next) => {
     }
     const fragmentAdded = await Fragment.create(newFragment);
 
-    // Agregamos el fragmento completo a la historia
-    story.pendingFragments.push(fragmentAdded);
+    // Agregamos el fragmento a la historia
+    story.pendingFragments.push(fragmentAdded._id);
     await story.save();
 
     res.status(201).json({ message: "Fragment created successfully" });
