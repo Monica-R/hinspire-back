@@ -13,5 +13,8 @@ const voteSchema = new mongoose.Schema({
   },
 });
 
+// Añadimos un índice único para que un usuario no pueda votar dos veces por el mismo fragmento
+voteSchema.index({ user: 1, fragment: 1 }, { unique: true });
+
 const Vote = mongoose.model("Vote", voteSchema);
 export default Vote;
