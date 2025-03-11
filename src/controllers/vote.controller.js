@@ -1,6 +1,22 @@
 import Vote from '../models/Vote.model.js';
 import Fragment from '../models/Fragment.model.js';
 
+export const getUserVotes = async (req, res, next) => {
+    try {
+      const userId = req.payload._id;
+      // Buscamos los votos del usuario
+      const votes = await Vote.find({ user: userId });
+      // Si solo te interesa el fragmentId, puedes hacer:
+      const fragmentIds = votes.map(vote => vote.fragment);
+      res.status(200).json(fragmentIds);
+      // Si prefieres enviar toda la info del voto, simplemente:
+      // res.status(200).json(votes);
+    } catch (error) {
+      next(error);
+    }
+};
+  
+
 export const addVote = async (req, res, next) => {
     try {
         const userId = req.payload._id;
