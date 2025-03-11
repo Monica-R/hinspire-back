@@ -135,7 +135,13 @@ export const deleteStory = async (req, res, next) => {
 // GET: all stories of user -populate?-
 export const getStoriesByUser = async (req, res, next) => {
   try {
-    const userId = req.payload._id;
+    const userId = req.params.userId;
+    const authenticatedUserId = req.payload._id;
+
+    if (userId !== authenticatedUserId) {
+      res.status(403).send("You are not authorized.");
+    }
+
     const allUserStories = await Story.find({ author: userId }).populate("author", "username email");
     res.status(200).json(allUserStories);
   } catch (error) {
