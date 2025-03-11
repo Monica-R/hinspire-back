@@ -23,7 +23,7 @@ export const getStoryById = async (req, res, next) => {
       return;
     }
 
-    res.status(200).json({ getStory });
+    res.status(200).json(getStory);
   } catch (error) {
     console.log(error);
     next(error);
