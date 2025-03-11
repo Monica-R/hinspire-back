@@ -6,6 +6,12 @@ export const addVote = async (req, res, next) => {
         const userId = req.payload._id;
         const fragmentId = req.params.fragmentId;
 
+        // Comprobamos que fragmentId es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(fragmentId)) {
+            res.status(400).json({ message: "Invalid fragmentId." });
+            return;
+        }
+
         // Comprobamos si el usuario ha votado
         // Lo buscamos con findOne
         const existingVote = await Vote.findOne({ user: userId, fragment: fragmentId });
@@ -30,6 +36,12 @@ export const deleteVote = async (req, res, next) => {
     try {
         const userId = req.payload._id;
         const fragmentId = req.params.fragmentId;
+
+        // Comprobamos que fragmentId es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(fragmentId)) {
+            res.status(400).json({ message: "Invalid fragmentId." });
+            return;
+        }
 
         // Comprobamos si el voto existe
         const vote = await Vote.findOne({ user: userId, fragment: fragmentId });
