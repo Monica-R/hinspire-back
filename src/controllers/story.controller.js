@@ -16,7 +16,22 @@ export const getStories = async (req, res, next) => {
 export const getStoryById = async (req, res, next) => {
   try {
     const storyId = req.params.id;
-    const getStory = await Story.findById(storyId).populate("author", "username");
+    const getStory = await Story.findById(storyId)
+      .populate("author", "username")
+      .populate({
+        path: "pendingFragments",
+        populate: {
+          path: "author",
+          select: "username"
+        }
+      })
+      .populate({
+        path: "fragments",
+        populate: {
+          path: "author",
+          select: "username"
+        }
+      });
     // si no se encuentra la historia
     if (!getStory) {
       res.status(404).send("Story not found");
