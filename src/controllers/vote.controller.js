@@ -1,5 +1,6 @@
 import Vote from '../models/Vote.model.js';
 import Fragment from '../models/Fragment.model.js';
+import mongoose from 'mongoose';
 
 export const getUserVotes = async (req, res, next) => {
     try {
