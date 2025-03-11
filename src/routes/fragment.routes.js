@@ -5,7 +5,7 @@ const router = express();
 
 //router.get("/", getFragments);
 router.get("/story/:id", getFragmentsByStory);
-router.post("/", addFragment);
+router.post("/:id", addFragment);
 router.put("/:id", editFragment);
 router.delete("/:id", deleteFragment);
 
