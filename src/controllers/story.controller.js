@@ -1,6 +1,5 @@
 import Fragment from "../models/Fragment.model.js";
 import Story from "../models/Story.model.js";
-import mongoose from "mongoose";
 
 
 // GET: all stories
@@ -137,7 +136,7 @@ export const deleteStory = async (req, res, next) => {
 export const getStoriesByUser = async (req, res, next) => {
   try {
     const userId = req.payload._id;
-    const allUserStories = await Story.find({ author: mongoose.Types.ObjectId(userId) }).populate("author", "username email");
+    const allUserStories = await Story.find({ author: userId }).populate("author", "username email");
     res.status(200).json(allUserStories);
   } catch (error) {
     console.log(error);
