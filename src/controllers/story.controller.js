@@ -1,5 +1,6 @@
 import Fragment from "../models/Fragment.model.js";
 import Story from "../models/Story.model.js";
+import mongoose from 'mongoose';
 
 
 // GET: all stories
@@ -48,12 +49,12 @@ export const getStoryById = async (req, res, next) => {
 export const addStory = async (req, res, next) => {
   try {
     const { title, description, status } = req.body;
-    const author = req.payload._id;
+    const authorId = req.payload._id;
     const authorName = req.payload.username;
     const newStory = {
       title,
       description,
-      author,
+      author : new mongoose.Types.ObjectId(authorId),
       status
     }
     await Story.create(newStory);
@@ -61,7 +62,7 @@ export const addStory = async (req, res, next) => {
     res.status(201).json(
       {
         message: "Story created successfully.", 
-        newStory: {...newStory.toObject(), authorName} //toObject sirve para pasar de un objeto tipo documento mongodb -en este caso- en un objeto normal
+        newStory: {...newStory, authorName} //toObject sirve para pasar de un objeto tipo documento mongodb -en este caso- en un objeto normal
       }
     );
   } catch (error) {
