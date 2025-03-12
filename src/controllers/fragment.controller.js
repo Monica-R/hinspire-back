@@ -71,6 +71,17 @@ export const editFragment = async (req, res, next) => {
       return res.status(403).json({ message: "You are not the author of this story" });
     }
 
+    // obtenemos la historia a la que pertenece el fragmento
+    const story = await Story.findById(fragment.story);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" })
+    }
+
+    // comprobamos que el fragmento esté en pendingFragments
+    if (!story.pendingFragments.includes(fragmentId)) {
+      return res.status(403).json({message: "Fragment cannot be edited because it is no longer pending"});
+    }
+
     // editamos el fragmento
     fragment.content = content || fragment.content;
     await fragment.save();
@@ -93,6 +104,17 @@ export const deleteFragment = async (req, res, next) => {
 
     if (fragment.author.toString() !== userId) {
       res.status(403).send("You are not authorized.");
+    }
+
+    // Obtenemos la historia a la que pertenece el fragmento
+    const story = await Story.findById(fragment.story);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    // Verificamos que el fragmento esté en pendingFragments
+    if (!story.pendingFragments.includes(fragmentId)) {
+      return res.status(400).json({ message: "Fragment cannot be deleted because it is no longer pending" });
     }
 
     // Eliminamos el fragmento
