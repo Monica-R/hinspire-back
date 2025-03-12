@@ -98,7 +98,7 @@ export const editStory = async (req, res, next) => {
 
     // Guardando los cambios
     await story.save();
-    res.status(200).json({ message: "Story updated successfully", story });
+    return res.status(200).json({ message: "Story updated successfully", story });
 
   } catch (error) {
     console.log(error);
@@ -126,7 +126,7 @@ export const deleteStory = async (req, res, next) => {
     // Eliminamos la historia
     await Story.findByIdAndDelete(storyId);
     
-    res.status(200).json({ message: "Story deleted successully." });
+    return res.status(200).json({ message: "Story deleted successully." });
   } catch (error) {
     console.log(error);
     next(error);
@@ -171,7 +171,7 @@ export const finishStory = async (req, res, next) => {
     story.pendingFragments = [];
     // Guardamos los cambios
     await story.save();
-    res.status(200).json({ message: "Story completed successfully"});
+    return res.status(200).json({ message: "Story completed successfully"});
   } catch (error) {
     console.log(error);
     next(error);
