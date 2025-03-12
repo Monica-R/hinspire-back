@@ -95,7 +95,7 @@ export const editFragment = async (req, res, next) => {
 export const deleteFragment = async (req, res, next) => {
   try {
     const userId = req.payload._id;
-    const fragmentId = req.params.fragmentId;
+    const fragmentId = req.params.id;
     const fragment = await Fragment.findById(fragmentId);
 
     if (!fragment) {
