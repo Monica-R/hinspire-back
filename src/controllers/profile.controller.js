@@ -29,35 +29,29 @@ export const editProfile = async (req, res, next) => {
             return res.status(400).json({ message: "At least one field is required for updating" });
         }
 
-        // Crear objeto de actualización solo con campos válidos
-        const updateData = {};
-        if (name?.trim()) updateData.name = name.trim();
-        if (email?.trim()) updateData.email = email.trim();
-    
-        if (email) {
-            const existingUser = await User.findOne({ email });
-            if (existingUser && existingUser._id.toString() !== userId) {
-                return res.status(400).json({ message: "Email is already in use" });
-            }
-        }
-        
         // Obtener el usuario actual para verificar contraseña si es necesario
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
+        if (email) {
+            const existingUser = await User.findOne({ email });
+            if (existingUser && existingUser._id.toString() !== userId) {
+                return res.status(400).json({ message: "Email is already in use" });
+            }
+        }
+
+        // Crear objeto de actualización solo con campos válidos
+        const updateData = {};
+        if (name?.trim()) updateData.name = name.trim();
+        if (email?.trim()) updateData.email = email.trim();
+
         // Si se intenta cambiar la contraseña
         if (newPassword) {
             // Verificar que se proporcionó la contraseña actual
             if (!currentPassword) {
                 return res.status(400).json({ message: "Current password is required to set a new password" });
-            }
-            
-            // Obtener el usuario con su contraseña para verificar
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
             }
             
             // Verificar que la contraseña actual sea correcta
