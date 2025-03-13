@@ -156,7 +156,7 @@ export const acceptFragment = async (req, res, next) => {
     // Guardamos la historia con el fragmento aceptado
     await story.save();
 
-    res.status(200).json({ message: "Fragment accepted successfully." });
+    return res.status(200).json({ message: "Fragment accepted successfully." });
 
   } catch (error) {
     console.log(error);
