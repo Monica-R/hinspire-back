@@ -74,21 +74,6 @@ export const deleteProfile = async (req, res, next) => {
           return res.status(404).json({ message: "User not found" });
         }
 
-        //Eliminamos los fragmentos del usuario
-        await Fragment.deleteMany({ author: userId });
-
-        // Buscamos todas las historias del usuario
-        const userStories = await Story.find({author: userId});
-        
-        //  Para cada historia del usuario:
-        for (const story of userStories) {
-            // Eliminamos todos los fragmentos asociados a esta historia (de cualquier autor)
-            await Fragment.deleteMany({ story: story._id });
-            
-            // Eliminamos la historia
-            await Story.findByIdAndDelete(story._id);
-        }
-
         // Obtener IDs de fragmentos del usuario una sola vez
         const userFragmentIds = await Fragment.find({ author: userId }).distinct('_id');
 
@@ -108,9 +93,24 @@ export const deleteProfile = async (req, res, next) => {
         
         // Lo mismo para fragmentos aceptados
         await Story.updateMany(
-            { fragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } },
-            { $pull: { fragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } } }
-        );
+            { fragments: { $in: userFragmentIds } },
+            { $pull: { fragments: { $in: userFragmentIds } } }
+        );        
+
+        //Eliminamos los fragmentos del usuario
+        await Fragment.deleteMany({ author: userId });
+
+        // Buscamos todas las historias del usuario
+        const userStories = await Story.find({author: userId});
+        
+        //  Para cada historia del usuario:
+        for (const story of userStories) {
+            // Eliminamos todos los fragmentos asociados a esta historia (de cualquier autor)
+            await Fragment.deleteMany({ story: story._id });
+            
+            // Eliminamos la historia
+            await Story.findByIdAndDelete(story._id);
+        }
 
         // Al final, eliminamos al usuario
         await User.findByIdAndDelete(userId);
