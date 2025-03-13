@@ -1,4 +1,4 @@
-import express from 'express';
+import bcrypt from 'bcrypt';
 import User from '../models/User.model.js';
 
 // GET /profile - Obtenemos los datos del usuario autenticado
@@ -23,9 +23,9 @@ export const getProfile = async (req, res) => {
 export const editProfile = async (req, res, next) => {
     try {
         const userId = req.payload._id;
-        const { name, email } = req.body;
+        const { name, email, currentPassword, newPassword } = req.body;
     
-        if (!name && !email) {
+        if (!name && !email && !newPassword) {
             return res.status(400).json({ message: "At least one field is required for updating" });
         }
 
@@ -39,7 +39,39 @@ export const editProfile = async (req, res, next) => {
             if (existingUser && existingUser._id.toString() !== userId) {
                 return res.status(400).json({ message: "Email is already in use" });
             }
-        }   
+        }
+        
+        // Obtener el usuario actual para verificar contraseña si es necesario
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Si se intenta cambiar la contraseña
+        if (newPassword) {
+            // Verificar que se proporcionó la contraseña actual
+            if (!currentPassword) {
+                return res.status(400).json({ message: "Current password is required to set a new password" });
+            }
+            
+            // Obtener el usuario con su contraseña para verificar
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            
+            // Verificar que la contraseña actual sea correcta
+            const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Current password is incorrect" });
+            }
+            
+            // Hashear la nueva contraseña
+            // Usar la misma constante saltRounds que en signup, o definirla aquí si no está disponible globalmente
+            const saltRounds = 10; // O importar el valor desde donde esté definido
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+            updateData.password = hashedPassword;
+        }
     
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).select("-password");
     
