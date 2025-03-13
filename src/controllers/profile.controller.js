@@ -92,7 +92,13 @@ export const deleteProfile = async (req, res, next) => {
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ message: "Profile deleted successfully" });
+        res.status(200).json({ 
+            message: "Profile deleted successfully" ,
+            actions: {
+                clearToken: true,
+                redirectTo: "/"
+            }
+        });
     } catch (error) {    
         next(error);
     }
