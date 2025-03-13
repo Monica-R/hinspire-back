@@ -25,7 +25,7 @@ export const editProfile = async (req, res, next) => {
         const userId = req.payload._id;
         const { name, email, currentPassword, newPassword } = req.body;
     
-        if (!name || !email || !newPassword) {
+        if (!name && !email && !newPassword) {
             return res.status(400).json({ message: "At least one field is required for updating" });
         }
 
