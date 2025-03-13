@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAuthenticated } from '../middlewares/jwt.middleware.js';
-import { validateEmail, optionalPasswordValidation } from '../validators/auth.validators.js';
+import { validateEmail, validatePasswordStrength } from '../validators/auth.validators.js';
 import { deleteProfile, editProfile, getProfile } from '../controllers/profile.controller.js';
 
 // Instanciamos el router de express
@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/profile", isAuthenticated, getProfile);
 
 // Editar el perfil del usuario autenticado
-router.put("/profile", isAuthenticated, validateEmail, optionalPasswordValidation, editProfile);
+router.put("/profile", isAuthenticated, validateEmail, validatePasswordStrength, editProfile);
 
 // Eliminar el perfil del usuario autenticado
 router.delete("/profile", isAuthenticated, deleteProfile);
