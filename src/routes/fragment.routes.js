@@ -5,7 +5,7 @@ import { isAuthenticated } from '../middlewares/jwt.middleware.js';
 const router = express();
 
 //router.get("/", getFragments);
-router.put("/:storyId/confirm/:fragmentId", acceptFragment);
+router.put("/:storyId/confirm/:fragmentId", isAuthenticated, acceptFragment);
 router.get("/story/:id", getFragmentsByStory);
 router.post("/:id", isAuthenticated, addFragment);
 router.put("/:id", isAuthenticated, editFragment);
