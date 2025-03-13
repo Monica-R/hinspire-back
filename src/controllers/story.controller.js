@@ -85,11 +85,13 @@ export const editStory = async (req, res, next) => {
     // Si no pertenece al autor, se te lanza un 403 diciendo que no estás autorizado
     if (story.author.toString() !== userId) {
       res.status(403).send("You are not authorized");
+      return;
     }
     // Si la historia tiene fragmentos, no se puede editar
     const hasFragments = await Fragment.exists({ story: storyId })
     if (hasFragments) {
       res.status(403).json({ message: "Cannot edit a story with fragments." });
+      return;
     }
 
     story.title = title || story.title;
@@ -114,10 +116,12 @@ export const deleteStory = async (req, res, next) => {
 
     if (!story) {
       res.status(404).send("Story not found.");
+      return;
     }
 
     if (story.author.toString() !== userId) {
       res.status(403).send("You are not authorized.");
+      return;
     }
 
     // Eliminamos los fragmentos primero en cascada para eliminar luego la historia
@@ -159,10 +163,12 @@ export const finishStory = async (req, res, next) => {
 
     if (!story) {
       res.status(404).send("Story not found.");
+      return;
     }
 
     if (story.author.toString() !== userId) {
       res.status(403).send("You are not authorized to finish this story.");
+      return;
     }
 
     // Cambiar estado de la historia a "completed"
