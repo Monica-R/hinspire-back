@@ -89,11 +89,21 @@ export const deleteProfile = async (req, res, next) => {
             await Story.findByIdAndDelete(story._id);
         }
 
-        //  Buscamos y actualizamos historias de otros usuarios donde este usuario haya contribuido
-        // Primero, eliminamos las referencias a fragmentos de este usuario en pendingFragments
+        // Obtener IDs de fragmentos del usuario una sola vez
+        const userFragmentIds = await Fragment.find({ author: userId }).distinct('_id');
+
+        // Actualizar referencias en historias de otros usuarios
         await Story.updateMany(
-            { pendingFragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } },
-            { $pull: { pendingFragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } } }
+            { $or: [
+                { pendingFragments: { $in: userFragmentIds } },
+                { fragments: { $in: userFragmentIds } }
+            ]},
+            { 
+                $pull: { 
+                    pendingFragments: { $in: userFragmentIds },
+                    fragments: { $in: userFragmentIds }
+                } 
+            }
         );
         
         // Lo mismo para fragmentos aceptados
