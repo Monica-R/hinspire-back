@@ -20,6 +20,7 @@ export const isAuthenticated = (req, res, next) => {
         // Pasamos al siguiente middleware
         next();
     } catch (error) {
+        console.log(token)
         console.error(error);
         return res.status(401).json({ message: "Invalid or expired token." });
     }
