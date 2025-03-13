@@ -87,7 +87,7 @@ export const editStory = async (req, res, next) => {
       res.status(403).send("You are not authorized");
       return;
     }
-    
+
     // Si la historia tiene fragmentos, no se puede editar
     // Solo bloquear la edición si existen fragmentos aceptados
     if (story.fragments && story.fragments.length > 0) {
@@ -100,7 +100,8 @@ export const editStory = async (req, res, next) => {
 
     // Guardando los cambios
     await story.save();
-    return res.status(200).json({ message: "Story updated successfully", story });
+    res.status(200).json({ message: "Story updated successfully", story });
+    return;
 
   } catch (error) {
     console.log(error);
