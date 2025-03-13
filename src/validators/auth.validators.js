@@ -36,7 +36,23 @@ export const validatePasswordStrength = (req, res, next) => {
     }
     next();
 };
-  
+
+export const optionalPasswordValidation = (req, res, next) => {
+  if (req.body.newPassword) {
+      // Temporalmente asignar newPassword a password para usar el validator existente
+      const originalNewPassword = req.body.newPassword;
+      req.body.password = originalNewPassword;
+      
+      // Ejecutar la validación
+      return validatePasswordStrength(req, res, function() {
+          // Restaurar el campo newPassword para usarlo en el controlador
+          req.body.newPassword = originalNewPassword;
+          delete req.body.password; // Eliminar el campo temporal
+          next();
+      });
+  }
+  return next();
+};
   // Verifica si el email ya está registrado
   export const checkUserExists = async (req, res, next) => {
     try {
