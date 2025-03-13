@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
 import User from '../models/User.model.js';
+import Fragment from '../models/Fragment.model.js';
+import Story from '../models/Story.model.js';
 
 // GET /profile - Obtenemos los datos del usuario autenticado
 export const getProfile = async (req, res) => {
@@ -66,10 +68,43 @@ export const editProfile = async (req, res) => {
 export const deleteProfile = async (req, res, next) => {
     try {
         const userId = req.payload._id;
-        const user = await User.findByIdAndDelete(userId);
+
+        const user = await User.findById(userId);
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
+
+        //Eliminamos los fragmentos del usuario
+        await Fragment.deleteMany({ author: userId });
+
+        // Buscamos todas las historias del usuario
+        const userStories = await Story.find({author: userId});
+        
+        //  Para cada historia del usuario:
+        for (const story of userStories) {
+            // Eliminamos todos los fragmentos asociados a esta historia (de cualquier autor)
+            await Fragment.deleteMany({ story: story._id });
+            
+            // Eliminamos la historia
+            await Story.findByIdAndDelete(story._id);
+        }
+
+        //  Buscamos y actualizamos historias de otros usuarios donde este usuario haya contribuido
+        // Primero, eliminamos las referencias a fragmentos de este usuario en pendingFragments
+        await Story.updateMany(
+            { pendingFragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } },
+            { $pull: { pendingFragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } } }
+        );
+        
+        // Lo mismo para fragmentos aceptados
+        await Story.updateMany(
+            { fragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } },
+            { $pull: { fragments: { $in: await Fragment.find({ author: userId }).distinct('_id') } } }
+        );
+
+        // Al final, eliminamos al usuario
+        await User.findByIdAndDelete(userId);
+
         res.status(200).json({ 
             message: "Profile deleted successfully" ,
             actions: {
