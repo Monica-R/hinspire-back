@@ -6,6 +6,7 @@ export const isAuthenticated = (req, res, next) => {
     // Extraemos el token de la petición (cabeceras)
     const token = getTokenFromHeaders(req);
     // Si no hay token, respondemos con un error
+    console.log(token)
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
     }
@@ -20,8 +21,6 @@ export const isAuthenticated = (req, res, next) => {
         // Pasamos al siguiente middleware
         next();
     } catch (error) {
-        console.log(token)
-        console.error(error);
         return res.status(401).json({ message: "Invalid or expired token." });
     }
 };
