@@ -6,6 +6,7 @@ export const isAuthenticated = (req, res, next) => {
     // Extraemos el token de la petición (cabeceras)
     const token = getTokenFromHeaders(req);
     // Si no hay token, respondemos con un error
+    console.log(token)
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
     }
@@ -17,7 +18,6 @@ export const isAuthenticated = (req, res, next) => {
         });
         // Si el token es válido, guardamos el payload en el objeto request
         req.payload = payload;
-
         // Pasamos al siguiente middleware
         next();
     } catch (error) {
@@ -28,7 +28,6 @@ export const isAuthenticated = (req, res, next) => {
 // Function used to extract the JWT token from the request's 'Authorization' Headers
 function getTokenFromHeaders(req) {
     // Check if the token is available on the request Headers
-    console.log(req.headers.authorization);
     if (
       req.headers.authorization &&
       req.headers.authorization.split(" ")[0] === "Bearer"
