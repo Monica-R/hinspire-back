@@ -6,7 +6,7 @@ export const isAuthenticated = (req, res, next) => {
     // Extraemos el token de la petición (cabeceras)
     const token = getTokenFromHeaders(req);
     // Si no hay token, respondemos con un error
-    console.log(token)
+    console.log('el token en el middle isAuthenticated', token)
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
     }
