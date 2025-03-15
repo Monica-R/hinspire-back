@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import User from '../models/User.model.js';
 import Fragment from '../models/Fragment.model.js';
 import Story from '../models/Story.model.js';
-import { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 // GET /profile - Obtenemos los datos del usuario autenticado
 export const getProfile = async (req, res, next) => {
