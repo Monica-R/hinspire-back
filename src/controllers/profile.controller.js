@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 // GET /profile - Obtenemos los datos del usuario autenticado
 export const getProfile = async (req, res, next) => {
     try {
-        const userId = new Types.ObjectId(req.payload._id);
+        const userId = new mongoose.Types.ObjectId(req.payload._id);
         const user = await User.findById(userId).select("-password");
         // NOTA: En mongoose, el método select() se usa para excluir campos de la respuesta
         // En este caso, excluimos el campo password con el uso de un guión (-<campo>)
