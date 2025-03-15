@@ -16,14 +16,14 @@ export const signup = async (req, res, next) => {
         const { email, password, username } = req.body;
         // Encriptamos la contraseña con bcrypt
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
         // Creamos un nuevo usuario
-        const newUser = { //newUser será la requestBody
+        // Guardamos el usuario en la base de datos
+        const newUser = User.create({
             email, 
             password: hashedPassword, 
             username 
-        };
-        // Guardamos el usuario en la base de datos
-        await User.create(newUser);
+        });
 
         // Generamos el token JWT
         const authToken = jwt.sign(
