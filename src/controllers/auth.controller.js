@@ -24,11 +24,11 @@ export const signup = async (req, res, next) => {
             password: hashedPassword, 
             username 
         });
-
+        console.log("Nuevo usuario creado:", newUser);
         // Generamos el token JWT
         const authToken = jwt.sign(
             { 
-                _id: newUser._id.toString(),
+                _id: newUser._id,
                 email: newUser.email,
                 username: newUser.username
             }, // payload
