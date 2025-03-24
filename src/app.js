@@ -10,6 +10,7 @@ import adminRoutes from './routes/admin.routes.js';
 import storyRoutes from './routes/story.routes.js';
 import fragmentRoutes from './routes/fragment.routes.js';
 import voteRoutes from './routes/votes.routes.js';
+import geminiRoutes from './routes/gemini.routes.js';
 
 const app = express();
 config.applyMiddlewares(app);
@@ -23,6 +24,7 @@ app.use("/admin", adminRoutes);
 app.use("/stories", storyRoutes);
 app.use("/fragments", fragmentRoutes);
 app.use("/votes", voteRoutes);
+app.use("/gemini", geminiRoutes);
 
 app.use("/", (req, res, next) => {
     console.info('ESTAMOS EN SERVER!!');
