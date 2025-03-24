@@ -6,3 +6,9 @@ export const aiRequestLimiter = rateLimit({
   message: { error: "Has alcanzado el límite de peticiones. Inténtalo más tarde." },
   headers: true,  // Para mostrar info en las cabeceras de respuesta
 });
+
+
+export const strictLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10, // Límite bajo para IA
+});
