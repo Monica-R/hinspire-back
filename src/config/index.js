@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import { aiRequestLimiter } from '../middlewares/rateLimit.middleware.js'; //middleware para el límite de peticiones de la IA
+import { aiRequestLimiter, strictLimiter } from '../middlewares/rateLimit.middleware.js'; //middleware para el límite de peticiones de la IA
 
 // Incluimos la ruta del frontend
 const FRONTEND_URL = process.env.ORIGIN || "http://localhost:5173";
@@ -24,6 +24,7 @@ export const config = {
         app.use(express.json());
         app.use(express.urlencoded({ extended : false }));
         app.use(cookieParser());
+        app.use("/gemini/analyze-emotion", strictLimiter);
         app.use(aiRequestLimiter);
     }
 }
