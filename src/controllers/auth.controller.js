@@ -16,12 +16,6 @@ export const signup = async (req, res, next) => {
         const { email, password, username } = req.body;
         // Encriptamos la contraseña con bcrypt
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // Creamos un nuevo usuario
-        // const newUser = { //newUser será la requestBody
-        //     email, 
-        //     password: hashedPassword, 
-        //     username 
-        // };
         // Guardamos el usuario en la base de datos
         const newUser = await User.create(
             {
