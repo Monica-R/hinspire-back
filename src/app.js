@@ -13,6 +13,7 @@ import voteRoutes from './routes/votes.routes.js';
 import geminiRoutes from './routes/gemini.routes.js';
 
 const app = express();
+app.set("trust proxy", 1);
 config.applyMiddlewares(app);
 
 
